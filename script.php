@@ -2,6 +2,8 @@
 
 // Condicionais com php
 
+session_start(); // Iniciando a sessão
+
 @$categorias = []; // Declarando categorias
 @$categorias[] = 'infantil';
 @$categorias[] = 'adolescentes';
@@ -16,31 +18,44 @@
 // Validando dados do formulário
 if(empty($nome)) // O campo não pode ficar vazio
 {
-    echo 'O nome não pode ser vazio!';
+    $_SESSION['mensagem de erro'] = 'O nome não pode ser vazio, preencha os campos a baixo!';
+    header('location: index.php');
+}
+
+
+else if(strlen($nome) < 3) // Restringe quantidade minima de caracteres
+{
+    // echo 'O nome não pode conter menos de três caracteres';
+    // return;
+    $_SESSION['mensagem de erro'] = 'O nome não pode conter menos de três caracteres';
+    header('location: index.php');
     return;
 }
 
-if(strlen($nome) < 3) // Restringe quantidade minima de caracteres
+else if(strlen($nome) > 40) // Restringe a quantidade máxima de caracteres
 {
-    echo 'O nome não pode conter menos de três caracteres';
+    // echo 'O nome é muito extenso!';
+    // return;
+    $_SESSION['mensagem de erro'] = 'O nome é muito extenso!';
+    header('location: index.php');
     return;
 }
 
-if(strlen($nome) > 40) // Restringe a quantidade máxima de caracteres
+else if(!is_numeric($idade)) // Permite apenas números para o campo idade
 {
-    echo 'O nome é muito extenso!';
+    //echo 'Informe um número correto para idedade!';
+    //return;
+    $_SESSION['mensagem de erro'] = 'Informe um número correto para idade!';
+    header('location: index.php');
     return;
 }
 
-if(!is_numeric($idade)) // Permite apenas números para o campo idade
+else if(strlen($idade) > 3) // Não aceita número acima de três digitos
 {
-    echo 'Informe um número correto para idedade!';
-    return;
-}
-
-if(strlen($idade) > 3) // Não aceita número acima de três digitos
-{
-    echo 'O campo idade não pode ser superior a três números!';
+    // echo 'O campo idade não pode ser superior a três números!';
+    // return;
+    $_SESSION['mensagem de erro'] = 'O campo idade não pode ser superior a três números!';
+    header('location: index.php');
     return;
 }
 
@@ -53,23 +68,40 @@ if(@$idade >= 6 && @$idade <= 12)
     for($i = 0; $i <= count($categorias); $i++)
     {
         if(@$categorias[$i] == 'infantil')
-        echo "O nadador ", $nome, " compete na categoria ", $categorias[$i];
+        // echo "O nadador ", $nome, " compete na categoria ", $categorias[$i];
+        {
+            $_SESSION['mensagem de erro'] = "O nadador ". $nome. " compete na categoria ". $categorias[$i];
+            header('location: index.php');
+            return;
+        }
     }
 }
-elseif($idade >= 13 && $idade <= 18)
+
+else if($idade >= 13 && $idade <= 18)
 {
     for($i = 0; $i <= count($categorias); $i++)
     {
         if(@$categorias[$i] == 'adolescente')
-        echo "O nadador " , $nome, " compete na categoria adolescente " , $categorias[$i];
+        // echo "O nadador " , $nome, " compete na categoria adolescente " , $categorias[$i];
+        {
+            $_SESSION['mensagem de erro'] = "O nadador ". $nome. " compete na categoria". $categorias[$i];
+            header('location: index.php');
+            return;
+        }
     }
 }
-else//($idade >= 19 && $idade <= 100);
+
+else //($idade >= 19 && $idade <= 100);
 {
     for($i = 0; $i <= count($categorias); $i++)
     {
         if(@$categorias[$i] == 'adulto')
-        echo "O nadador ", $nome, " compete na categoria ", $categorias[$i];
+        // echo "O nadador ", $nome, " compete na categoria ", $categorias[$i];
+        {
+            $_SESSION['mensagem de erro'] = "O nadador ". $nome. " compete na categoria ". $categorias[$i];
+            header('location: index.php');
+            return;
+        }
     }
 }
 
